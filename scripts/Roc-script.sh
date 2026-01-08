@@ -1,3 +1,8 @@
+# ─── 0. Third-party feeds（必须在最前） ──────────────────────
+sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+sed -i '$a src-git small https://github.com/kenzok8/small-package' feeds.conf.default
+
+
 # ─── 1. 基础定制：IP/主机名/固件信息 ──────────────────────────
 # 修改默认IP & 固件名称 & 编译署名和时间
 sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
@@ -28,6 +33,9 @@ sed -i "/attendedsysupgrade/d" $(find ./feeds/luci/collections/ -type f -name "M
 # sed -i 's/reg = <0x0 0x4ab00000 0x0 0x[0-9a-f]\+>/reg = <0x0 0x4ab00000 0x0 0x02000000>/' target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6018-512m.dtsi
 # sed -i 's/reg = <0x0 0x4ab00000 0x0 0x[0-9a-f]\+>/reg = <0x0 0x4ab00000 0x0 0x04000000>/' target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6018-512m.dtsi
 # sed -i 's/reg = <0x0 0x4ab00000 0x0 0x[0-9a-f]\+>/reg = <0x0 0x4ab00000 0x0 0x06000000>/' target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6018-512m.dtsi
+
+
+
 
 
 # 移除要替换的包
@@ -96,44 +104,11 @@ chmod +x package/luci-app-athena-led/root/etc/init.d/athena_led package/luci-app
 
 
 
-# ─── 3. 新增插件 ───────────────────────────────────────
+# ─── 3. 你自己维护的独立插件（允许 clone 的只有这种） ──────
+# 非 feeds、非 kenzok8 体系的，才允许放 package/
 
-# 新增插件：luci-app-ddns
-git clone --depth=1 https://github.com/sirpdboy/luci-app-ddns-go package/ddns-go
-
-# 插件：luci-app-ipsec-vpnserver-manyusers
-git clone --depth=1 https://github.com/waynesg/luci-app-ipsec-vpnserver-manyusers package/luci-app-ipsec-vpnserver-manyusers
-
-# # 新增插件：luci-app-mwol
-git clone --depth=1 https://github.com/Mleaf/openwrt-mwol.git package/openwrt-mwol
-
-
-git clone --depth=1 https://github.com/openwrt/luci.git package/luci-app-nft-qos
-
-# 克隆 luci-app-subconverter 和 sub-web
-# 第一行正确地将 small-package 仓库克隆到了 package/small-package 目录中。
-
-# 克隆 small-package 仓库到指定目录
-git clone --depth=1 https://github.com/kenzok8/small-package.git package/small-package
-
-# 克隆具体插件（从 small-package 中提取）
-git clone --depth=1 https://github.com/kenzok8/small-package package/luci-app-subconverter
-git clone --depth=1 https://github.com/kenzok8/small-package sub-web
-
-# 插件：luci-app-homeassistant
-git clone --depth=1 https://github.com/kenzok8/small-package package/luci-app-homeassistant
-
-# # 新增插件：luci-app-taskplan
-git clone --depth=1 https://github.com/kenzok8/small-package package/luci-app-taskplan
-
-# # 新增插件：luci-app-store
-git clone --depth=1 https://github.com/kenzok8/small-package package/luci-app-store
-
-# # 新增插件：luci-app-turboacc
-# git clone --depth=1 https://github.com/chenmozhijin/turboacc.git package/turboacc
-
-# # 新增插件：luci-app-upnp
-# git clone --depth=1 https://github.com/openwrt/luci-app-upnp package/luci-app-upnp
+git clone --depth=1 https://github.com/waynesg/luci-app-ipsec-vpnserver-manyusers \
+  package/luci-app-ipsec-vpnserver-manyusers
 
 
 
